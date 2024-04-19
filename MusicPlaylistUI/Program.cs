@@ -8,7 +8,28 @@ namespace MusicPlaylistUI
     {
         static void Main(string[] args)
         {
-            MusicDataService playlist = new MusicDataService();
+            Console.Write("Enter username: ");
+            string username = Console.ReadLine();
+
+            Console.Write("Enter password: ");
+            string password = Console.ReadLine();
+
+            MusicPlaylistService musicService = new MusicPlaylistService();
+            bool result = musicService.MusicPlaylist(username,password);
+
+            if (result)
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Welcome to Your Playlist! Enter your favorite songs to be added in your playlist! ^_^ ");
+                Console.WriteLine(" ");
+            }
+            else
+            {
+                Console.WriteLine("ERROR: User not found.");
+                return;
+            }
+
+            MusicDataService dataService = new MusicDataService();
             int songIndex = 1;
 
             while (true)
@@ -23,26 +44,20 @@ namespace MusicPlaylistUI
                 Console.Write("Enter artist name: ");
                 string artist = Console.ReadLine();
 
-                MusicPlaylistService musicPlaylist = new MusicPlaylistService();
-                bool result = musicPlaylist.MusicPlaylist(title, artist);
+                dataService.AddSong(new Song { title = title, artist = artist });
 
-                if(result)
+                Console.WriteLine($"Added Song: {title} - {artist}");
+                Console.WriteLine(" ");
+                Console.WriteLine("Your Playlist:");
+
+                foreach (var addedSong in dataService.GetSongs())
                 {
-                    Song song = new Song { title = title, artist = artist };
-                    playlist.AddSong(song);
-                    Console.WriteLine($"Added Song: " + title + "-" + artist);
-
-                    Console.WriteLine(" ");
-                    Console.WriteLine("Welcome to Your Playlist! ");
-
-                    foreach(var AddedSong in playlist.GetSongs())
-                    {
-                        Console.WriteLine($"{songIndex++}: " + AddedSong.title + "-" + AddedSong.artist);
-                    }
-                    songIndex = 1;
-                    Console.WriteLine(" ");
+                    Console.WriteLine($"{songIndex++}: {addedSong.title} - {addedSong.artist}");
                 }
-            }
+                songIndex = 1;
+                Console.WriteLine(" ");
+                }
         }
     }
 }
+              
