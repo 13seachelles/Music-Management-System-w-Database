@@ -8,56 +8,83 @@ namespace MusicPlaylistUI
     {
         static void Main(string[] args)
         {
-            Console.Write("Enter username: ");
-            string username = Console.ReadLine();
+            Console.WriteLine(":¨ ·.· ¨:\r\n `· . ·` ");
+            Console.WriteLine("Welcome to Your Playlist! Enter your favorite songs to be added in your playlist! ˚v˚ ");
+            Console.WriteLine(" ");
 
-            Console.Write("Enter password: ");
-            string password = Console.ReadLine();
 
-            MusicPlaylistService musicService = new MusicPlaylistService();
-            bool result = musicService.MusicPlaylist(username,password);
-
-            if (result)
-            {
-                Console.WriteLine(" ");
-                Console.WriteLine("Welcome to Your Playlist! Enter your favorite songs to be added in your playlist! ^_^ ");
-                Console.WriteLine(" ");
-            }
-            else
-            {
-                Console.WriteLine("ERROR: User not found.");
-                return;
-            }
-
-            MusicDataService dataService = new MusicDataService();
+            SqlDbData dataService = new SqlDbData();
             int songIndex = 1;
 
             while (true)
             {
-                Console.Write("Enter song title (or 'e' to exit): ");
-                string title = Console.ReadLine();
-                if (title.ToLower() == "e")
+                Console.WriteLine(":¨ ·.· ¨: ");
+                Console.WriteLine("Options: ");
+                Console.WriteLine("1. Add a song");
+                Console.WriteLine("2. Delete a song");
+                Console.WriteLine("3. View playlist");
+                Console.WriteLine("4. Exit");
+                Console.Write("Choose an option: ");
+                string option = Console.ReadLine();
+
+                if (option == "1")
+                {
+                    Console.WriteLine(" ");
+                    Console.Write("Enter song title: ");
+                    string title = Console.ReadLine();
+
+                    Console.Write("Enter artist name: ");
+                    string artist = Console.ReadLine();
+
+                    dataService.AddSong(new Song { title = title, artist = artist });
+
+                    Console.WriteLine($"Added Song: {title} - {artist}");
+                }
+                else if (option == "2")
+                {
+                    Console.WriteLine(" ");
+                    Console.Write("Enter song title to delete (or 'b' to back): ");
+                    string title = Console.ReadLine();
+                    if (title.ToLower() == "b")
+                    {
+                        continue;
+                    }
+
+                    Console.Write("Enter artist name to delete (or 'b' to back): ");
+                    string artist = Console.ReadLine();
+                    if (artist.ToLower() == "b")
+                    {
+                        continue;
+                    }
+
+                    dataService.DeleteSong(title, artist);
+
+                    Console.WriteLine($"Deleted Song: {title} - {artist}");
+                }
+                else if (option == "3")
+                {
+                    Console.WriteLine(" ");
+                    Console.WriteLine("Your Playlist:");
+                    foreach (var addedSong in dataService.GetSongs())
+                    {
+                        Console.WriteLine($"{songIndex++}: {addedSong.title} - {addedSong.artist}");
+                    }
+                    songIndex = 1;
+                }
+                else if (option == "4")
                 {
                     break;
                 }
-
-                Console.Write("Enter artist name: ");
-                string artist = Console.ReadLine();
-
-                dataService.AddSong(new Song { title = title, artist = artist });
-
-                Console.WriteLine($"Added Song: {title} - {artist}");
-                Console.WriteLine(" ");
-                Console.WriteLine("Your Playlist:");
-
-                foreach (var addedSong in dataService.GetSongs())
+                else
                 {
-                    Console.WriteLine($"{songIndex++}: {addedSong.title} - {addedSong.artist}");
+                    Console.WriteLine("Invalid option, please try again.");
                 }
-                songIndex = 1;
+
                 Console.WriteLine(" ");
-                }
+            }
         }
+        
     }
+    
 }
               
