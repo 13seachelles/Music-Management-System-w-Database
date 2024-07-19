@@ -12,6 +12,7 @@ namespace MusicPlaylistUI
             Console.WriteLine("Welcome to Your Playlist! Enter your favorite songs to be added in your playlist! ˚v˚ ");
             Console.WriteLine(" ");
 
+            //SqlDbData.Connect();
 
             SqlDbData dataService = new SqlDbData();
             int songIndex = 1;
@@ -23,7 +24,8 @@ namespace MusicPlaylistUI
                 Console.WriteLine("1. Add a song");
                 Console.WriteLine("2. Delete a song");
                 Console.WriteLine("3. View playlist");
-                Console.WriteLine("4. Exit");
+                Console.WriteLine("4. Update a song");
+                Console.WriteLine("5. Exit");
                 Console.Write("Choose an option: ");
                 string option = Console.ReadLine();
 
@@ -72,6 +74,33 @@ namespace MusicPlaylistUI
                     songIndex = 1;
                 }
                 else if (option == "4")
+                {
+                    Console.WriteLine(" ");
+                    Console.Write("Enter the current song title to update (or 'b' to back): ");
+                    string oldTitle = Console.ReadLine();
+                    if (oldTitle.ToLower() == "b")
+                    {
+                        continue;
+                    }
+
+                    Console.Write("Enter the current artist name to update (or 'b' to back): ");
+                    string oldArtist = Console.ReadLine();
+                    if (oldArtist.ToLower() == "b")
+                    {
+                        continue;
+                    }
+
+                    Console.Write("Enter the new song title: ");
+                    string newTitle = Console.ReadLine();
+
+                    Console.Write("Enter the new artist name: ");
+                    string newArtist = Console.ReadLine();
+
+                    dataService.UpdateSong(new Song { title = oldTitle, artist = oldArtist }, new Song { title = newTitle, artist = newArtist });
+
+                    Console.WriteLine($"Updated Song: {oldTitle} - {oldArtist} to {newTitle} - {newArtist}");
+                }
+                else if (option == "5")
                 {
                     break;
                 }

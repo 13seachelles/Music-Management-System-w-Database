@@ -6,7 +6,8 @@ namespace MusicPlaylistDataServices
     public class SqlDbData
     {
         static string connectionString
-            = "Data Source =LAPTOP-QQEBTG3V\\SQLEXPRESS; Initial Catalog = AccountManagement; Integrated Security = True;";
+            //= "Data Source =LAPTOP-QQEBTG3V\\SQLEXPRESS; Initial Catalog = AccountManagement; Integrated Security = True;";
+            = "Server = tcp:20.205.142.49,1433;Database= AccountManagement;User Id= sa;Password= rachelleiskolar43_";
 
         public List<Song> GetSongs()
         {
@@ -18,7 +19,7 @@ namespace MusicPlaylistDataServices
                 string selectStatement = "SELECT title, artist FROM songs";
                 SqlCommand selectCommand = new SqlCommand(selectStatement, sqlConnection);
 
-                sqlConnection.Open();
+                 sqlConnection.Open();
 
                 using (SqlDataReader reader = selectCommand.ExecuteReader())
                 {
@@ -66,6 +67,23 @@ namespace MusicPlaylistDataServices
 
                 sqlConnection.Open();
                 deleteCommand.ExecuteNonQuery();
+            }
+        }
+
+        public void UpdateSong(Song oldSong, Song newSong)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                string updateStatement = "UPDATE songs SET title = @newTitle, artist = @newArtist WHERE title = @oldTitle AND artist = @oldArtist";
+                SqlCommand updateCommand = new SqlCommand(updateStatement, sqlConnection);
+
+                updateCommand.Parameters.AddWithValue("@newTitle", newSong.title);
+                updateCommand.Parameters.AddWithValue("@newArtist", newSong.artist);
+                updateCommand.Parameters.AddWithValue("@oldTitle", oldSong.title);
+                updateCommand.Parameters.AddWithValue("@oldArtist", oldSong.artist);
+
+                sqlConnection.Open();
+                updateCommand.ExecuteNonQuery();
             }
         }
     }
