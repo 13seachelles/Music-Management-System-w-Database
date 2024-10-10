@@ -6,8 +6,8 @@ namespace MusicPlaylistDataServices
     public class SqlDbData
     {
         static string connectionString
-            //= "Data Source =LAPTOP-QQEBTG3V\\SQLEXPRESS; Initial Catalog = AccountManagement; Integrated Security = True;";
-            = "Server = tcp:20.205.142.49,1433;Database= AccountManagement;User Id= sa;Password= rachelleiskolar43_";
+            = "Data Source =LAPTOP-QQEBTG3V\\SQLEXPRESS; Initial Catalog = AccountManagement; Integrated Security = True;";
+            //= "Server = tcp:20.205.142.49,1433;Database= AccountManagement;User Id= sa;Password= rachelleiskolar43_";
 
         public List<Song> GetSongs()
         {
